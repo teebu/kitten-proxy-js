@@ -7,7 +7,7 @@ function RedirectorBase(cachePath, redirectFn, blacklistFn) {
     this.blacklistFn = blacklistFn || function(host) { return false; };
     this.count = 0;
 
-    if (!path.existsSync(this.cachePath)) {
+    if (!fs.existsSync(this.cachePath)) {
         fs.mkdirSync(this.cachePath, '0755');
     }
 }

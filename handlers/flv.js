@@ -6,7 +6,7 @@ exports.proxy = function(request, proxyRequest, proxyResponse, response) {
 
     response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
 
-    if (path.existsSync(flvPath)) {
+    if (fs.existsSync(flvPath)) {
         fs.readFile(flvPath, function (err, data) {
             if (err === null) {
                 response.end(data);

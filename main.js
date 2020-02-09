@@ -9,9 +9,10 @@ var kittenizer = require('./handlers/kittenizer'),
     proxy = new proxy.Proxy();
 
 proxy.addHandler('image/png', kittenizerRedirector);
-proxy.addHandler('image/jpeg', redirector);
+proxy.addHandler('image/jpeg', kittenizerRedirector);
+//proxy.addHandler('image/jpeg', redirector);
 proxy.addHandler('image/gif', kittenizerRedirector);
 proxy.addHandler('video/x-flv', flv);
 proxy.addHandler('audio/mpeg', leecher);
 
-proxy.listen(8000);
+proxy.listen(3000);

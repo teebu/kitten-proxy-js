@@ -1,5 +1,7 @@
-var http = require('http'),
-    fs = require('fs'),
+//var http = require('http')
+var http = require('follow-redirects').http;
+
+var fs = require('fs'),
     url = require('url');
 
 function Proxy() {
@@ -20,9 +22,11 @@ Proxy.prototype.listen = function(port) {
                 host: urlParts.host,
                 port: 80,
                 method: request.method,
-                path: urlParts.pathname + (typeof urlParts.search === 'undefined' ? '' : urlParts.search),
+                path: urlParts.pathname + (typeof urlParts.search === 'undefined' || urlParts.search == null ? '' : urlParts.search),
                 headers: request.headers
             };
+
+        console.log(options)
 
         proxyRequest = http.request(options);
 
@@ -36,6 +40,14 @@ Proxy.prototype.listen = function(port) {
 
         request.addListener('end', function() {
             proxyRequest.end();
+        });
+
+        request.addListener('upgrade', function(req, socket, head) {
+            console.log(req, socket, head)
+        });
+
+        request.addListener('error', function(err) {
+            console.log(err)
         });
 
     }).listen(port);
@@ -55,6 +67,7 @@ Proxy.prototype.assignProxy = function(request, proxyRequest, proxyResponse, res
 
 function forward(request, proxyRequest, proxyResponse, response) {
     proxyResponse.addListener('data', function(chunk) {
+        //console.log(chunk.toString());
         response.write(chunk);
     });
     proxyResponse.addListener('end', function() {
